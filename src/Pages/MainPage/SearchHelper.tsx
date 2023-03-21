@@ -40,7 +40,7 @@ const SearchHelper = (props: { handleFilter: any, setInputText: any, recomendArr
 					:
 
 					<span onClick={() => { props.setRecomendItem(item.item); props.tickerTitleCheck(item.item[0]); dispatch(setIsLoading()); }}  >
-						<div onClick={() => { dispatch(setModal()); }} className='search-helper' >{item.item[0]}  {currentPrice}  {item.item[12]}₽</div>
+						<div onClick={() => { dispatch(setModal()); }} className='search-helper' >{item.item[0]}  {currentPrice}  ₽</div>
 					</span>
 
 				}

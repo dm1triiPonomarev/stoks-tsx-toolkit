@@ -29,7 +29,7 @@ const MainPage = () => {
 
 			await moexApi.securitiesDataRaw('stock', 'shares', "TQBR").then((response: any) => {
 				let initialMass: [string[]] = response.marketdata.data
-				setRecomendArr(initialMass?.filter(item => item[0].includes(ticker.toUpperCase()) && item[1] === "TQBR" && item[12]))
+				setRecomendArr(initialMass?.filter(item => item[0].includes(ticker.toUpperCase()) && item[1] === "TQBR"))
 
 				moexApi.securityMarketData(ticker.toUpperCase()).then((response: any) => {
 					setTickerTitle(response.node.friendlyTitle)
