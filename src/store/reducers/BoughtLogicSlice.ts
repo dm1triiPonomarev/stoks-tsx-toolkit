@@ -1,14 +1,18 @@
+import { useEffect } from 'react';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 
 
 interface InitialState {
-	boughtList: [{
+	boughtList: {
 		id: number,
 		boughtPrice: number,
 		title: string
 		currentPrice: number
-	}]
+	}[],
+	initialBalance: number,
+	notEnoughCash: boolean,
+	currentBalance: number
 }
 const initialState: InitialState = {
 	boughtList: [{
@@ -16,7 +20,11 @@ const initialState: InitialState = {
 		boughtPrice: 0,
 		title: 'test',
 		currentPrice: 0
-	},]
+	},
+	],
+	initialBalance: 100000,
+	notEnoughCash: false,
+	currentBalance: 100000,
 }
 
 const boughtLogicSlice = createSlice({
@@ -24,10 +32,18 @@ const boughtLogicSlice = createSlice({
 	initialState,
 	reducers: {
 		buy: (state, action: PayloadAction<any>) => {
-			state.boughtList.push(action.payload)
+
+			if (state.initialBalance < action.payload.boughtPrice) {
+				state.notEnoughCash = true
+			} else {
+				state.initialBalance -= Number(action.payload.boughtPrice)
+				state.boughtList.push(action.payload)
+			}
 		},
-		cancelBuy: (state, action: PayloadAction<number>) => {
-			state.boughtList.filter(item => item.id !== action.payload)
+		cancelBuy: (state, action: PayloadAction<any>) => {
+			state.boughtList = state.boughtList.filter(item => (item.id) !== (action.payload.id))
+			state.initialBalance += Number(action.payload.currentPrice)
+
 		},
 		setCurrentPrice: (state, action: PayloadAction<any>) => {
 			state.boughtList.forEach(item => {
@@ -36,10 +52,16 @@ const boughtLogicSlice = createSlice({
 				}
 			})
 		},
+		setCurrentPortfolioPrice: (state, action: PayloadAction<any>) => {
 
+			if (!isNaN(action.payload.total)) {
+				state.currentBalance += action.payload.total
+			}
+
+		}
 	}
 })
 
 
 export default boughtLogicSlice.reducer
-export const { buy, cancelBuy, setCurrentPrice } = boughtLogicSlice.actions
+export const { buy, cancelBuy, setCurrentPrice, setCurrentPortfolioPrice } = boughtLogicSlice.actions

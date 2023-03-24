@@ -4,6 +4,9 @@ import { useAppSelector, useAppDispatch } from '../../hooks/stateHooks';
 import { setIsLoading, removeIsLoading } from '../../store/reducers/LoadingSlice';
 import SearchHelper from './SearchHelper';
 
+import { setModal } from '../../store/reducers/ModalSlice';
+import MainModal from './MainModal/MainModal';
+
 const MainPage = () => {
 
 	const [currentTicker, setCurrentTicker] = useState('')
@@ -13,7 +16,8 @@ const MainPage = () => {
 	const [recomendArr, setRecomendArr] = useState([['']])
 	const [tickerTitle, setTickerTitle] = useState('')
 	const [recomendItem, setRecomendItem] = useState([''])
-
+	const [currentourPrice, setCurrentourPrice] = useState(0)
+	const currentBalance = useAppSelector((state) => state.buy.initialBalance)
 
 
 	const isLoading = useAppSelector((state) => state.loading.isLoading)
@@ -25,6 +29,7 @@ const MainPage = () => {
 
 	async function handlefilter(ticker: string) {
 		if (ticker.length >= 2) {
+
 			dispatch(setIsLoading())
 
 			await moexApi.securitiesDataRaw('stock', 'shares', "TQBR").then((response: any) => {
@@ -53,17 +58,23 @@ const MainPage = () => {
 	async function tickerTitleCheck(ticker: string) {
 		dispatch(setIsLoading())
 		await (moexApi.securityMarketData(ticker.toUpperCase()).then((response: any) => {
-
+			setCurrentourPrice(response.node.last)
 			setTickerTitle(response.node.friendlyTitle)
 		}))
 		dispatch(removeIsLoading())
 	}
 
 
+
 	return (
 		<div className='wrapper'>
 			<div style={{ margin: '0 auto' }} className="inner">
-
+				<h1>
+					КЕШ
+					<p style={{ fontSize: '36px' }}>
+						{String(currentBalance.toFixed(2))}pуб.
+					</p>
+				</h1>
 
 				<h1>Вбей в поиске тикер актива</h1>
 				<div className="search">
@@ -74,7 +85,7 @@ const MainPage = () => {
 						{isLoading ?
 							<div>Loading...</div>
 							:
-							<SearchHelper handleFilter={handlefilter} setInputText={setInputText} recomendArr={recomendArr} setRecomendItem={setRecomendItem} tickerTitleCheck={tickerTitleCheck} tickerTitle={tickerTitle} recomendItem={recomendItem} />
+							<SearchHelper current={currentourPrice} handleFilter={handlefilter} setInputText={setInputText} recomendArr={recomendArr} setRecomendItem={setRecomendItem} tickerTitleCheck={tickerTitleCheck} tickerTitle={tickerTitle} recomendItem={recomendItem} />
 						}
 					</div>
 				</div>

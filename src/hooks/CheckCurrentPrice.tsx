@@ -19,6 +19,8 @@ const CheckCurrentPrice = (props: { item: { id: number | undefined; boughtPrice:
 			id: props.item.id,
 			currentPrice: response.node.last
 		}
+
+
 		dispatch(setCurrentPrice(currentObject))
 
 		await new Promise(resolve => setTimeout(resolve, 3000));

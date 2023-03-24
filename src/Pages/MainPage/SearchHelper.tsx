@@ -5,7 +5,7 @@ import { setModal, } from '../../store/reducers/ModalSlice';
 import MainModal from './MainModal/MainModal';
 // import checkLastPrice from './checkLastPrice';
 
-const SearchHelper = (props: { handleFilter: any, setInputText: any, recomendArr: string[][], setRecomendItem: Dispatch<SetStateAction<string[]>>, tickerTitleCheck: (ticker: string) => Promise<void>, tickerTitle: string, recomendItem: any }) => {
+const SearchHelper = (props: { current: number, handleFilter: any, setInputText: any, recomendArr: string[][], setRecomendItem: Dispatch<SetStateAction<string[]>>, tickerTitleCheck: (ticker: string) => Promise<void>, tickerTitle: string, recomendItem: any }) => {
 	const dispatch = useAppDispatch()
 	const isModal = useAppSelector((state) => state.modal.isModal)
 	const MoexAPI = require("moex-api");
@@ -18,6 +18,7 @@ const SearchHelper = (props: { handleFilter: any, setInputText: any, recomendArr
 	const SearchItem = (item: any) => {
 
 		const [currentPrice, setCurrentPrice] = useState(item.item[12])
+		// const [AbscurrentPrice, setAbsCurrentPrice] = useState(currentPrice)
 
 		async function func(ticker: any) {
 			const response = await (moexApi.securityMarketData(ticker.toUpperCase()))
@@ -34,19 +35,22 @@ const SearchHelper = (props: { handleFilter: any, setInputText: any, recomendArr
 		return (
 
 			<div>
+				<div key={item.item[0]} className="">
 
-				{item.item.length < 1 ?
-					<div></div>
-					:
+					{item.item.length < 1 ?
+						<div></div>
+						:
+						<span onClick={() => { props.setRecomendItem(item.item); props.tickerTitleCheck(item.item[0]); dispatch(setIsLoading()); }}  >
+							<div onClick={() => { dispatch(setModal()); }} className='search-helper' >{item.item[0]}  {currentPrice}  ₽</div>
+						</span>
 
-					<span onClick={() => { props.setRecomendItem(item.item); props.tickerTitleCheck(item.item[0]); dispatch(setIsLoading()); }}  >
-						<div onClick={() => { dispatch(setModal()); }} className='search-helper' >{item.item[0]}  {currentPrice}  ₽</div>
-					</span>
+					}
+				</div>
 
-				}
 				{isModal &&
-					<MainModal key={item.item[0]} recomendItem={props.recomendItem} tickerTitle={props.tickerTitle} boughtPrice={String(currentPrice)} />
+					<MainModal recomendItem={props.recomendItem} tickerTitle={props.tickerTitle} boughtPrice={Number(props.current)} notEnoughtCash={false} />
 				}
+
 
 			</div>
 		)
@@ -61,7 +65,7 @@ const SearchHelper = (props: { handleFilter: any, setInputText: any, recomendArr
 				}
 				return (
 					<div>
-						<SearchItem key={item[0]} item={item} />
+						<SearchItem item={item} />
 
 					</div>
 				)
