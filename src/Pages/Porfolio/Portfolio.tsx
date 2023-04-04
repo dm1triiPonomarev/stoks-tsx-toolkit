@@ -11,17 +11,13 @@ const Portfolio = () => {
 	const dispatch = useAppDispatch()
 	const initialBalance = useAppSelector((state) => state.buy.initialBalance)
 	const currentBalance = useAppSelector((state) => state.buy.currentBalance)
-	// const [totalTop, setTotalTop] = useState(0)
+	// const count = useAppSelector((state) => state.buy.boughtList)
 
 	async function CheckCurrentPortfolioPrice() {
 		if (Number(stocksList.length) > 1) {
-			let total = 0
-			// setTotal(0)
-			let result = stocksList.reduce((acc, cur) => acc + Number(Number(cur.currentPrice) - Number(cur.boughtPrice)), 0)
+			let result = stocksList.reduce((acc, cur) => acc + Number(Number(cur.currentPrice) - Number(cur.boughtPrice)) * cur.count, 0)
 			let currentDifference = 100000 - Number(currentBalance)
 			dispatch(setCurrentPortfolioPrice({ total: (Number(result.toFixed(2)) + Number(currentDifference)) }))
-
-
 
 		}
 	}
@@ -57,7 +53,6 @@ const Portfolio = () => {
 					</h1>
 					<h1>
 						КЕШ
-
 						<br />
 						<p>{(String(initialBalance.toFixed(2)))}руб.</p>
 					</h1>
@@ -83,14 +78,17 @@ const Portfolio = () => {
 
 						return (
 							<div className="stock-card">
-								<p>
+								<span>
 
-									{item.boughtPrice}
+									{(item.boughtPrice * item.count).toFixed(2)}
 									({((1 - item.boughtPrice / item.currentPrice) * 100).toFixed(2)})%
-								</p>
+									<p style={{ margin: 0, opacity: .8 }}>[{item.boughtPrice}] X{item.count}</p>
+								</span>
 								<p>{item.title}</p>
-								<p>{item.currentPrice}</p>
-								<button onClick={() => dispatch(cancelBuy({ id: item.id, currentPrice: item.currentPrice }))} >SELL</button>
+								<p style={{ display: 'flex', gap: '15px' }}>
+									{item.currentPrice}
+									<button onClick={() => dispatch(cancelBuy({ id: item.id, currentPrice: item.currentPrice, count: item.count }))} >SELL</button>
+								</p>
 							</div>
 						)
 					}

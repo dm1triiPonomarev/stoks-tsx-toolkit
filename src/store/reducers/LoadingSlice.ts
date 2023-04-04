@@ -25,5 +25,4 @@ const loadingSlice = createSlice({
 })
 
 export default loadingSlice.reducer
-// export const selcetLoading = (state: RootState) => state.loading.isLoading
 export const { setIsLoading, removeIsLoading } = loadingSlice.actions

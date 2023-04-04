@@ -8,7 +8,8 @@ interface InitialState {
 		id: number,
 		boughtPrice: number,
 		title: string
-		currentPrice: number
+		currentPrice: number,
+		count: number
 	}[],
 	initialBalance: number,
 	notEnoughCash: boolean,
@@ -19,9 +20,9 @@ const initialState: InitialState = {
 		id: 0,
 		boughtPrice: 0,
 		title: 'test',
-		currentPrice: 0
-	},
-	],
+		currentPrice: 0,
+		count: 1
+	}],
 	initialBalance: 100000,
 	notEnoughCash: false,
 	currentBalance: 100000,
@@ -32,17 +33,16 @@ const boughtLogicSlice = createSlice({
 	initialState,
 	reducers: {
 		buy: (state, action: PayloadAction<any>) => {
-
 			if (state.initialBalance < action.payload.boughtPrice) {
 				state.notEnoughCash = true
 			} else {
-				state.initialBalance -= Number(action.payload.boughtPrice)
+				state.initialBalance -= Number(action.payload.boughtPrice * action.payload.count)
 				state.boughtList.push(action.payload)
 			}
 		},
 		cancelBuy: (state, action: PayloadAction<any>) => {
 			state.boughtList = state.boughtList.filter(item => (item.id) !== (action.payload.id))
-			state.initialBalance += Number(action.payload.currentPrice)
+			state.initialBalance += Number(action.payload.currentPrice * action.payload.count)
 
 		},
 		setCurrentPrice: (state, action: PayloadAction<any>) => {
@@ -53,7 +53,6 @@ const boughtLogicSlice = createSlice({
 			})
 		},
 		setCurrentPortfolioPrice: (state, action: PayloadAction<any>) => {
-
 			if (!isNaN(action.payload.total)) {
 				state.currentBalance += action.payload.total
 			}
