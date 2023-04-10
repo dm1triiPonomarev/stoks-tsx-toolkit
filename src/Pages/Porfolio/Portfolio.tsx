@@ -14,18 +14,18 @@ const Portfolio = () => {
 	// const count = useAppSelector((state) => state.buy.boughtList)
 
 	async function CheckCurrentPortfolioPrice() {
-		if (Number(stocksList.length) > 1) {
-			let result = stocksList.reduce((acc, cur) => acc + Number(Number(cur.currentPrice) - Number(cur.boughtPrice)) * cur.count, 0)
-			let currentDifference = 100000 - Number(currentBalance)
-			dispatch(setCurrentPortfolioPrice({ total: (Number(result.toFixed(2)) + Number(currentDifference)) }))
 
+		if (Number(stocksList.length) > 1) {
+			// let currentDifference = 100000 - Number(currentBalance)
+			// let result = stocksList.reduce((acc, cur) => acc + Number(Number(cur.currentPrice) - Number(cur.boughtPrice)) * cur.count, 0)
+			let totalResult = stocksList.reduce((acc, cur) => acc + Number(cur.currentPrice), 0)
+			dispatch(setCurrentPortfolioPrice({ total: (Number(totalResult.toFixed(2)) + Number(initialBalance)) }))
 		}
 	}
 
 	useEffect(() => {
-
 		CheckCurrentPortfolioPrice()
-	}, [stocksList])
+	},)
 
 
 	return (

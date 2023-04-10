@@ -36,6 +36,7 @@ const boughtLogicSlice = createSlice({
 			if (state.initialBalance < action.payload.boughtPrice) {
 				state.notEnoughCash = true
 			} else {
+				// state.currentBalance = state.initialBalance
 				state.initialBalance -= Number(action.payload.boughtPrice * action.payload.count)
 				state.boughtList.push(action.payload)
 			}
@@ -43,6 +44,9 @@ const boughtLogicSlice = createSlice({
 		cancelBuy: (state, action: PayloadAction<any>) => {
 			state.boughtList = state.boughtList.filter(item => (item.id) !== (action.payload.id))
 			state.initialBalance += Number(action.payload.currentPrice * action.payload.count)
+			if (state.boughtList.length <= 1) {
+				state.currentBalance = state.initialBalance
+			}
 
 		},
 		setCurrentPrice: (state, action: PayloadAction<any>) => {
@@ -54,7 +58,7 @@ const boughtLogicSlice = createSlice({
 		},
 		setCurrentPortfolioPrice: (state, action: PayloadAction<any>) => {
 			if (!isNaN(action.payload.total)) {
-				state.currentBalance += action.payload.total
+				state.currentBalance = action.payload.total
 			}
 
 		}
