@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/stoks-tsx-toolkit/static/css/main.1c31985e.css",
+    "main.css": "/stoks-tsx-toolkit/static/css/main.aae31552.css",
     "main.js": "/stoks-tsx-toolkit/static/js/main.9ee23704.js",
     "static/media/nabibulina.jpg": "/stoks-tsx-toolkit/static/media/nabibulina.30be6a37acc25203ed41.jpg",
     "static/media/star.svg": "/stoks-tsx-toolkit/static/media/star.11723c6b2b8f4da12184b584394433dd.svg",
     "index.html": "/stoks-tsx-toolkit/index.html",
-    "main.1c31985e.css.map": "/stoks-tsx-toolkit/static/css/main.1c31985e.css.map",
+    "main.aae31552.css.map": "/stoks-tsx-toolkit/static/css/main.aae31552.css.map",
     "main.9ee23704.js.map": "/stoks-tsx-toolkit/static/js/main.9ee23704.js.map"
   },
   "entrypoints": [
-    "static/css/main.1c31985e.css",
+    "static/css/main.aae31552.css",
     "static/js/main.9ee23704.js"
   ]
 }
