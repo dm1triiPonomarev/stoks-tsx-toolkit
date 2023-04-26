@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import star from './imgs/star.svg'
 import './Portfolio.scss'
 import { useAppSelector, useAppDispatch } from '../../hooks/stateHooks';
@@ -11,21 +11,21 @@ const Portfolio = () => {
 	const dispatch = useAppDispatch()
 	const initialBalance = useAppSelector((state) => state.buy.initialBalance)
 	const currentBalance = useAppSelector((state) => state.buy.currentBalance)
-	// const count = useAppSelector((state) => state.buy.boughtList)
+
 
 	async function CheckCurrentPortfolioPrice() {
 
 		if (Number(stocksList.length) > 1) {
-			// let currentDifference = 100000 - Number(currentBalance)
-			// let result = stocksList.reduce((acc, cur) => acc + Number(Number(cur.currentPrice) - Number(cur.boughtPrice)) * cur.count, 0)
-			let totalResult = stocksList.reduce((acc, cur) => acc + Number(cur.currentPrice), 0)
+			let currentDifference = 100000 - Number(currentBalance)
+			let result = stocksList.reduce((acc, cur) => acc + Number(Number(cur.currentPrice) - Number(cur.boughtPrice)) * cur.count, 0)
+			let totalResult = stocksList.reduce((acc, cur) => acc + Number(cur.currentPrice * cur.count), 0)
 			dispatch(setCurrentPortfolioPrice({ total: (Number(totalResult.toFixed(2)) + Number(initialBalance)) }))
 		}
 	}
 
 	useEffect(() => {
 		CheckCurrentPortfolioPrice()
-	},)
+	}, [stocksList])
 
 
 	return (

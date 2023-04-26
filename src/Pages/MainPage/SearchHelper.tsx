@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, FC, SetStateAction, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/stateHooks';
 import { removeIsLoading, setIsLoading } from '../../store/reducers/LoadingSlice';
 import { setModal, } from '../../store/reducers/ModalSlice';
@@ -12,15 +12,21 @@ const SearchHelper = (props: { current: number, handleFilter: any, setInputText:
 	const moexApi = new MoexAPI();
 
 
+	interface Item {
+		item: []
 
 
+	}
+	const item = {
+		item: []
+	}
 
 	const SearchItem = (item: any) => {
 
 		const [currentPrice, setCurrentPrice] = useState(item.item[12])
 		// const [AbscurrentPrice, setAbsCurrentPrice] = useState(currentPrice)
 
-		async function func(ticker: any) {
+		async function func(ticker: string) {
 			const response = await (moexApi.securityMarketData(ticker.toUpperCase()))
 
 			setCurrentPrice(response.node.last)
